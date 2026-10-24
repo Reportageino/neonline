@@ -2,9 +2,24 @@
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
   const toggle = $('#menuToggle'), nav = $('#mainNav'), overlay = $('#mobileOverlay');
-  const closeMenu = () => { nav?.classList.remove('open'); overlay?.classList.remove('show'); };
-  toggle?.addEventListener('click', () => { nav?.classList.toggle('open'); overlay?.classList.toggle('show'); });
-  overlay?.addEventListener('click', closeMenu); $$('.main-nav a').forEach(a => a.addEventListener('click', closeMenu));
+  const closeMenu = () => {
+    nav?.classList.remove('open'); overlay?.classList.remove('show');
+    toggle?.setAttribute('aria-expanded', 'false');
+    toggle?.setAttribute('aria-label', 'باز کردن منو');
+    document.body.classList.remove('menu-open');
+  };
+  toggle?.setAttribute('aria-expanded', 'false');
+  toggle?.addEventListener('click', () => {
+    const willOpen = !nav?.classList.contains('open');
+    nav?.classList.toggle('open', willOpen); overlay?.classList.toggle('show', willOpen);
+    toggle?.setAttribute('aria-expanded', String(willOpen));
+    toggle?.setAttribute('aria-label', willOpen ? 'بستن منو' : 'باز کردن منو');
+    document.body.classList.toggle('menu-open', willOpen);
+    if (willOpen) nav?.querySelector('a')?.focus();
+  });
+  overlay?.addEventListener('click', closeMenu);
+  $$('.main-nav a').forEach(a => a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
   const themeBtn = $('#themeToggle');
   try { if (localStorage.getItem('neon-theme') === 'dark') document.body.classList.add('dark'); } catch {}
   themeBtn?.addEventListener('click', () => { document.body.classList.toggle('dark'); try { localStorage.setItem('neon-theme', document.body.classList.contains('dark')?'dark':'light'); } catch {} });

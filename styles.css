@@ -36,3 +36,108 @@
 @keyframes neon-header-line{0%{background-position:100% 0;opacity:.35}50%{opacity:.85}100%{background-position:-120% 0;opacity:.35}}
 @keyframes neon-logo-pulse{0%,100%{filter:drop-shadow(0 0 2px #2778ff55)}50%{filter:drop-shadow(0 0 6px #27e0d080) drop-shadow(0 0 10px #2778ff40)}}
 @media(prefers-reduced-motion:reduce){.site-header:after,.site-header .brand img{animation:none!important}}
+
+/* v4: mobile header alignment and high-contrast navigation drawer */
+@media (max-width:760px){
+  .site-header{display:flex;flex-wrap:nowrap;justify-content:flex-start;gap:12px;padding-block:8px;isolation:isolate}
+  .site-header>.menu-toggle{order:1;display:grid;place-content:center;flex:0 0 42px;margin-inline-start:0;position:relative;z-index:1003;background:var(--panel);box-shadow:0 2px 10px #07142b12}
+  .site-header>.brand{order:2;flex:0 0 auto;margin:0;min-width:0}
+  .site-header>.header-actions{order:3;margin-inline-start:auto;flex:0 0 auto}
+  .site-header>.main-nav{order:4;position:fixed;top:0;right:0;bottom:0;left:auto;width:min(320px,86vw);height:100dvh;min-height:100vh;padding:88px 22px 28px;background:#fff;color:#14233d;border-left:1px solid #dbe5f2;box-shadow:-18px 0 55px #06142c35;display:flex;flex-direction:column;align-items:stretch;gap:5px;overflow-y:auto;transform:translateX(105%);transition:transform .24s ease;z-index:1002;visibility:hidden;pointer-events:none}
+  .site-header>.main-nav.open{transform:translateX(0);visibility:visible;pointer-events:auto}
+  body.dark .site-header>.main-nav{background:#0d1b32;color:#eef5ff;border-left-color:#263a58}
+  .site-header>.main-nav a{display:block;color:#23344f;padding:12px 14px;border-radius:11px;font-size:14px;line-height:1.7}
+  .site-header>.main-nav a:hover,.site-header>.main-nav a.active{background:#eaf2ff;color:#1459d9}
+  body.dark .site-header>.main-nav a{color:#dbe8ff}
+  body.dark .site-header>.main-nav a:hover,body.dark .site-header>.main-nav a.active{background:#18365f;color:#70dfff}
+  .site-header>.main-nav .nav-admin{display:block!important}
+  .mobile-overlay.show{display:block;position:fixed;inset:0;background:rgba(4,13,29,.52);backdrop-filter:blur(2px);z-index:1001}
+  .menu-toggle[aria-expanded="true"]{border-color:var(--cyan);box-shadow:0 0 0 3px #27e0d02b,0 0 18px #2778ff35}
+}
+@media (prefers-reduced-motion:reduce){.site-header>.main-nav{transition:none!important}}
+
+
+/* v6: centered mobile brand and correct drawer stacking */
+@media (max-width:760px){
+  .site-header{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:0;
+    padding:8px 14px;
+    isolation:auto !important;
+    z-index:1100;
+  }
+  .site-header:after{z-index:0}
+  .site-header>.brand{
+    position:absolute;
+    left:50%;
+    right:auto;
+    top:50%;
+    transform:translate(-50%,-50%);
+    margin:0 !important;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    white-space:nowrap;
+    z-index:2;
+  }
+  .site-header>.brand img{width:42px;height:42px;object-fit:contain}
+  .site-header>.brand span{font-size:clamp(15px,4.2vw,19px)}
+  .site-header>.menu-toggle{
+    order:0 !important;
+    position:relative;
+    inset:auto;
+    margin:0 !important;
+    z-index:1104;
+    flex:0 0 42px;
+  }
+  .site-header>.header-actions{
+    order:3 !important;
+    position:relative;
+    margin:0 !important;
+    z-index:1104;
+  }
+  .site-header>.main-nav{
+    position:fixed !important;
+    top:0 !important; right:0 !important; bottom:0 !important; left:auto !important;
+    z-index:1202 !important;
+    isolation:auto !important;
+  }
+  .mobile-overlay.show{
+    z-index:1201 !important;
+    background:rgba(4,13,29,.24) !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+  body.menu-open .site-header>.main-nav{z-index:1202 !important}
+}
+@media(max-width:360px){
+  .site-header>.brand span{display:none}
+  .site-header>.brand img{width:40px;height:40px}
+}
+
+/* v7: opaque mobile drawer and logo-only centered mobile brand */
+@media (max-width:760px){
+  .site-header{z-index:auto !important; isolation:auto !important;}
+  .site-header>.brand{left:50% !important;right:auto !important;transform:translate(-50%,-50%) !important;}
+  .site-header>.brand span{display:none !important;}
+  .site-header>.brand img{width:44px !important;height:44px !important;}
+  .site-header>.main-nav,
+  body.dark .site-header>.main-nav{
+    background:#fff !important;
+    color:#14233d !important;
+    opacity:1 !important;
+    filter:none !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    z-index:1202 !important;
+  }
+  .site-header>.main-nav a{color:#172943 !important;opacity:1 !important;}
+  .site-header>.main-nav a:hover,
+  .site-header>.main-nav a.active{background:#e4edff !important;color:#124fc4 !important;}
+  .mobile-overlay.show{z-index:1201 !important;background:rgba(4,13,29,.28) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;}
+}
+@media (max-width:360px){.site-header>.brand img{width:40px !important;height:40px !important;}}
